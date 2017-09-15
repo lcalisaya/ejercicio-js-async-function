@@ -1,41 +1,7 @@
-// const animeList = [
-// 	{
-// 		name: 'Caballeros del Zodíaco',
-// 		vista: true
-// 	},
-// 	{
-// 		name: 'Sailor Moon',
-// 		vista: true
-// 	},
-// 	{
-// 		name: 'Dragon Ball',
-// 		vista: false
-// 	},
-// 	{
-// 		name: 'Detective Conan',
-// 		vista: true
-// 	},
-// 	{
-// 		name: 'Evangelion',
-// 		vista: false
-// 	}
-// ];
-
 const lista = document.getElementById('lista');
 
-// animeList.forEach( (anime) => {
-// 	const itemLi = document.createElement('li');
-// 	const estado = document.createElement('p');
-
-// 	itemLi.className = 'anime';
-// 	itemLi.textContent = anime.name;
-// 	estado.textContent = anime.vista;
-
-// 	itemLi.append(estado);
-// 	lista.append(itemLi);
-// });
-
-
+//Por cada persona en formato JSON:
+//se construye un objeto que será un item de una lista que se presentará en pantalla
 function makePerson(person){
 	this.person = document.createElement('li');
 	this.personImage = document.createElement('img');
@@ -52,6 +18,7 @@ function makePerson(person){
 
 	lista.append(this.person);
 
+	//En el momento de cargar la imagen en pantalla, se le va a agregar un fondo con colores
 	this.personImage.onload = () => {
 		const vibrant = new Vibrant(this.personImage);
 		const colors = vibrant.swatches();
@@ -77,6 +44,7 @@ function makePerson(person){
 	}
 }
 
+//Se especifica a la API qué IDs de personas se quiere pedir
 function getPeopleList(min,max) {
 	this.min = min;
 	this.max = max;
@@ -85,10 +53,12 @@ function getPeopleList(min,max) {
 	}
 }
 
+//Por cada persona solicitada, se irá a buscar los datos a un servidor
 async function getPerson(id) {
 	const response = await fetch(`https://jikan.me/api/person/${id}`);
 	const data = await response.json();
 	makePerson(data);
 }
 
+//Pedimos que se traigan 8 personas: Desde el ID=10 hasta el ID=17
 getPeopleList(10,17);
