@@ -1,64 +1,76 @@
 const lista = document.getElementById('lista');
+const miDiv = document.getElementById('miDiv');
 
-//Por cada persona en formato JSON:
-//se construye un objeto que será un item de una lista que se presentará en pantalla
-function makePerson(person){
-	this.person = document.createElement('li');
-	this.personImage = document.createElement('img');
-	this.personBirth = document.createElement('p');
+function addPerson(person){
+this.personImage = document.createElement('img');
+this.personBirthday = document.createElement('p');
 
-	this.person.className = 'person';
+this.personBirthday.textContent = `#Fecha de Nacimiento: ${person.birthday}`;
+this.personImage.setAttribute('crossOrigin','anonymous');
+this.personImage.setAttribute('src', person.image);
 
-	this.personBirth.textContent = `#${person.birthday}`;
-	this.personImage.setAttribute('crossOrigin','anonymous');
-	this.personImage.setAttribute('src', person.image);
-
-	this.person.append(personImage);
-	this.person.append(personBirth);
-
-	lista.append(this.person);
-
-	//En el momento de cargar la imagen en pantalla, se le va a agregar un fondo con colores
-	this.personImage.onload = () => {
-		const vibrant = new Vibrant(this.personImage);
-		const colors = vibrant.swatches();
-		this.person.setAttribute('style',
-			`
-			background:
-				linear-gradient(
-					${colors.Vibrant.getHex()},
-					transparent
-				),
-				linear-gradient(
-					90deg,
-					${colors.LightVibrant.getHex()},
-					transparent
-				),
-				linear-gradient(
-					-90deg,
-					${colors.DarkVibrant.getHex()},
-					transparent
-				);
-			`
-		);
-	}
+this.personImage.onload = () => {
+	const vibrant = new Vibrant(this.personImage);
+	const colors = vibrant.swatches();
+	miDiv.setAttribute('style', 
+		`
+		background:
+			linear-gradient(
+				${colors.Vibrant.getHex()},
+				transparent
+			),
+			linear-gradient(
+				90deg,
+				${colors.LightVibrant.getHex()},
+				transparent
+			),
+			linear-gradient(
+				-90deg,
+				${colors.DarkVibrant.getHex()},
+				transparent
+			);
+		`
+	);	
 }
 
-//Se especifica a la API qué IDs de personas se quiere pedir
-function getPeopleList(min,max) {
-	this.min = min;
-	this.max = max;
-	for(let i = min; i <= max; i++) {
-		getPerson(i);
-	}
+miDiv.append(this.personImage);
+miDiv.append(this.personBirthday);
 }
 
-//Por cada persona solicitada, se irá a buscar los datos a un servidor
+//Por cada personaje en formato JSON:
+//se construye un objeto, el cual será un item de la lista presentada en pantalla
+function makeCharacter(person, i){
+	this.character = document.createElement('li');
+	this.characterImage = document.createElement('img');
+	this.characterName = document.createElement('p');
+
+	this.character.className = 'character';
+
+	this.characterName.textContent = `Personaje: ${person['voice-acting-role'][i].character.name}`;
+	this.characterImage.setAttribute('crossOrigin','anonymous');
+	this.characterImage.setAttribute('src', person['voice-acting-role'][i].character.image);
+
+	this.character.append(this.characterImage);
+	this.character.append(this.characterName);
+
+	lista.append(this.character);
+}
+
+
+//Para la persona solicitada, se va a buscar los datos a un servidor
 async function getPerson(id) {
 	const response = await fetch(`https://jikan.me/api/person/${id}`);
 	const data = await response.json();
-	makePerson(data);
+	const qCharacters = data['voice-acting-role'].length;
+	// console.log(data['voice-acting-role'][0].character.name);
+	// console.log(qCharacters);
+	
+	addPerson(data); //Para mostrar al actor/actriz
+
+	for(let pos=0; pos < qCharacters; pos++){
+		makeCharacter(data, pos); //Para mostrar un personaje interpretado por el actor/actriz
+	}
 }
 
-//Pedimos que se traigan 8 personas: Desde el ID=10 hasta el ID=17
-getPeopleList(10,17);
+//Pedimos que se traiga la persona con ID=81
+getPerson(81);
