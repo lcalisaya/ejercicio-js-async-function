@@ -1,8 +1,8 @@
 body {
   font-family: sans-serif;
-  margin: 0;
+  background: black;
 }
-.people-list {
+.characters-list {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
@@ -18,23 +18,19 @@ body {
   width: 25%;
   height: 400px;
   text-align: center;
-  background: white;
-  animation: .3s character;
-
   position: relative;
   overflow: hidden;
 }
 
 #miDiv {
   width: 300px;
-  margin: 0 auto;
+  margin: 10px auto;
   display: flex;
   justify-content: center;
   position: relative;
 }
 img {
   width: 70%;
-  
 }
 p {
   background: white;
@@ -45,15 +41,41 @@ p {
   right: 15px;
   text-transform: uppercase;
   font-weight: bold;
+  text-align: center;
 }
 
+main {
+  display: flex;
+  justify-content: center;
+}
 
-@keyframes character {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+h1 {
+  background: black;
+  color:white;
+  font-size: 2em;
+  text-transform: uppercase;
+  text-align: center;
+  border: 2px solid white;
+  padding: 10px;
+  margin: 10px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+h1::before, h1::after {
+  content: '';
+  flex: auto;
+  height: .1em;
+  display: block;
+  background: white;
+}
+
+h1::before {
+  margin-right: .5em;
+}
+
+h1::after {
+  margin-left: .5em;
 }
 

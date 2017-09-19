@@ -1,18 +1,50 @@
 const lista = document.getElementById('lista');
 const miDiv = document.getElementById('miDiv');
 
+//Para presentar los datos de una persona
 function addPerson(person){
-this.personImage = document.createElement('img');
-this.personBirthday = document.createElement('p');
+	this.personImage = document.createElement('img');
+	this.personBirthday = document.createElement('p');
 
-this.personBirthday.textContent = `#Fecha de Nacimiento: ${person.birthday}`;
-this.personImage.setAttribute('crossOrigin','anonymous');
-this.personImage.setAttribute('src', person.image);
+	this.personBirthday.innerHTML = 'Fecha de Nacimiento:' + '<br>' + person.birthday;
+	this.personImage.setAttribute('crossOrigin','anonymous');
+	this.personImage.setAttribute('src', person.image);
 
-this.personImage.onload = () => {
-	const vibrant = new Vibrant(this.personImage);
+	this.personImage.onload = () => {
+		miDiv.setAttribute('style', traerFondo(this.personImage));
+	}
+
+	miDiv.append(this.personImage);
+	miDiv.append(this.personBirthday);
+}
+
+//Por cada personaje en formato JSON:
+//se construye un objeto, el cual será un item de la lista presentada en pantalla
+function makeCharacter(person, i){
+	this.character = document.createElement('li');
+	this.characterImage = document.createElement('img');
+	this.characterName = document.createElement('p');
+
+	this.character.className = 'character';
+
+	this.characterName.textContent = `Personaje: ${person['voice-acting-role'][i].character.name}`;
+	this.characterImage.setAttribute('crossOrigin','anonymous');
+	this.characterImage.setAttribute('src', person['voice-acting-role'][i].character.image);
+	
+	// this.character.setAttribute('style', traerFondo(this.characterImage));
+	this.character.setAttribute('style', 'background:black;');
+
+	this.character.append(this.characterImage);
+	this.character.append(this.characterName);
+
+	lista.append(this.character);
+}
+
+//Se obtienen los colores predominantes de la imagen, que va a ser el background-color
+function traerFondo(imagen){
+	const vibrant = new Vibrant(imagen);
 	const colors = vibrant.swatches();
-	miDiv.setAttribute('style', 
+	return( 
 		`
 		background:
 			linear-gradient(
@@ -30,30 +62,7 @@ this.personImage.onload = () => {
 				transparent
 			);
 		`
-	);	
-}
-
-miDiv.append(this.personImage);
-miDiv.append(this.personBirthday);
-}
-
-//Por cada personaje en formato JSON:
-//se construye un objeto, el cual será un item de la lista presentada en pantalla
-function makeCharacter(person, i){
-	this.character = document.createElement('li');
-	this.characterImage = document.createElement('img');
-	this.characterName = document.createElement('p');
-
-	this.character.className = 'character';
-
-	this.characterName.textContent = `Personaje: ${person['voice-acting-role'][i].character.name}`;
-	this.characterImage.setAttribute('crossOrigin','anonymous');
-	this.characterImage.setAttribute('src', person['voice-acting-role'][i].character.image);
-
-	this.character.append(this.characterImage);
-	this.character.append(this.characterName);
-
-	lista.append(this.character);
+	);
 }
 
 
